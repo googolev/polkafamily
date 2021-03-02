@@ -14,7 +14,7 @@
                 </iframe>
             </div>
             <div v-show="selectedTab === 'default'">
-                Default tab
+                <div class="description-block" v-if="getDescription($i18n.locale, coin.key)" v-html="getDescription($i18n.locale, coin.key)"></div>
             </div>
         </div>
         <div v-else>
@@ -50,7 +50,8 @@ export default {
     computed: {
         ...mapGetters('coins', {
             price: 'getPrice',
-            getCoin: 'getCoin'
+            getCoin: 'getCoin',
+            getDescription: 'getDescription'
         })
     },
     async mounted() {
@@ -82,5 +83,11 @@ export default {
                 background: grey;
             }
         }
+    }
+
+    .description-block {
+        text-align: left;
+        max-width: 80%;
+        margin: 0 auto;
     }
 </style>
