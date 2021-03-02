@@ -1,31 +1,51 @@
 <template>
     <div>
-        <div class="coin-page-header">
-            <h1><img :src="require(`@/assets/${coin.key}.jpeg`)"> {{coin ? coin.name : ''}}</h1>
+        <div class="coin-page-header" v-if="coin">
+            <h1><img :src="require(`@/assets/${coin.key}.jpeg`)" v-if="coin"> {{coin ? coin.name : ''}}</h1>
             {{this.$route.params.key}} <span v-if="price(this.$route.params.key)">/ {{ price(this.$route.params.key)}} $</span>
-            <iframe v-if="coin.link" :src="`https://${coin.link}`"
+            <div class="tabs">
+                <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">Summary</div>
+                <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">Website preview</div>
+            </div>
+            <div v-show="selectedTab === 'webPreview'">
+                <iframe v-if="coin.link" :src="`https://${coin.link}`"
                     width="100%" height="1000" frameborder="0"
-                    allowfullscreen sandbox>
-           
-            </iframe>
+                    allowfullscreen sandbox="allow-scripts">
+                </iframe>
+            </div>
+            <div v-show="selectedTab === 'default'">
+                Default tab
+            </div>
+        </div>
+        <div v-else>
+            <Loader />
         </div>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
+import Loader from '../components/Loader'
 
 export default {
     name: 'Coin',
+    components: {
+        Loader
+    },
     data() {
         return {
-            coin: null
+            coin: null,
+            selectedTab: 'default'
         }
     },
     methods: {
          ...mapActions('coins', {
             getPrice: 'GET_PRICE',
-        })
+        }),
+        selectTab(tab) {
+            console.log(tab)
+            this.selectedTab = tab
+        }
     },
     computed: {
         ...mapGetters('coins', {
@@ -49,6 +69,18 @@ export default {
             padding-right: 10px;
             width: 25px;
             height: 25px;
+        }
+    }
+
+    .tabs {
+        display:flex;
+        div {
+            padding: 10px;
+            border: 1px solid black;
+            cursor: pointer;
+            &.active {
+                background: grey;
+            }
         }
     }
 </style>

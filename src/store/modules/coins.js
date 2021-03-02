@@ -22,7 +22,7 @@ const getDefaultState = () => {
             {
                 name: 'Polkastarter',
                 key: 'POLS',
-                link: 'polkastarter.com'
+                link: 'polkastarter.com?output=embed '
             },
             {
                 name: 'Litentry',
