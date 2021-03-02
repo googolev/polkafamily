@@ -4,8 +4,8 @@
             <h1><img :src="require(`@/assets/${coin.key}.jpeg`)" v-if="coin"> {{coin ? coin.name : ''}}</h1>
             {{this.$route.params.key}} <span v-if="price(this.$route.params.key)">/ {{ price(this.$route.params.key)}} $</span>
             <div class="tabs">
-                <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">Summary</div>
-                <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">Website preview</div>
+                <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">{{ $t('COIN_PAGE.SUMMARY') }}</div>
+                <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">{{ $t('COIN_PAGE.PREVIEW') }}</div>
             </div>
             <div v-show="selectedTab === 'webPreview'">
                 <iframe v-if="coin.link" :src="`https://${coin.link}`"

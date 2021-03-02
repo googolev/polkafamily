@@ -2,10 +2,22 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Polkafamily</router-link>
+      <LangSelector />
     </div>
     <router-view/>
   </div>
 </template>
+
+<script>
+import LangSelector from './components/LangSelector'
+
+export default {
+  name: 'App',
+  components: {
+    LangSelector
+  }
+}
+</script>
 
 <style lang="less">
 #app {
