@@ -1,17 +1,15 @@
 module.exports = {
-  root: true,
-  env: {
-    node: true
-  },
   extends: [
-    'plugin:vue/essential',
-    '@vue/standard'
+      // add more generic rulesets here, such as:
+      // 'eslint:recommended',
+      'plugin:vue/recommended'
   ],
-  parserOptions: {
-    parser: 'babel-eslint'
-  },
+  parserOptions: { parser: 'babel-eslint' },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+      // override/add rules settings here, such as:
+      'vue/no-v-html': 'off',
+      'vue/require-default-prop': 'off',
+      'vue/prop-name-casing': 'off',
+      'vue/no-parsing-error': 'off',
   }
 }
