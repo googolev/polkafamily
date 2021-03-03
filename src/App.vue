@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Polkafamily</router-link>
+      <router-link to="/">Polkagroup</router-link>
       <LangSelector />
     </div>
     <router-view/>

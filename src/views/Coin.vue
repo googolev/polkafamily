@@ -6,8 +6,10 @@
             <div class="tabs">
                 <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">{{ $t('COIN_PAGE.SUMMARY') }}</div>
                 <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">{{ $t('COIN_PAGE.PREVIEW') }}</div>
+                <div @click="selectTab('twitter')" v-if="coin.twitter"  :class="{'active': selectedTab === 'twitter'}">Twitter</div>
             </div>
-            <div v-show="selectedTab === 'webPreview'">
+            <div v-show="selectedTab === 'webPreview'" class="site-preview-block">
+                <Loader />
                 <iframe v-if="coin.link" :src="`https://${coin.link}`"
                     width="100%" height="1000" frameborder="0"
                     allowfullscreen sandbox="allow-scripts">
@@ -15,6 +17,10 @@
             </div>
             <div v-show="selectedTab === 'default'">
                 <div class="description-block" v-if="getDescription($i18n.locale, coin.key)" v-html="getDescription($i18n.locale, coin.key)"></div>
+            </div>
+            <div v-show="selectedTab === 'twitter'" class="twitter-block">
+                <Loader />
+                <Timeline :id="coin.twitter" sourceType="profile" @loaded="console.log('fasf')" />
             </div>
         </div>
         <div v-else>
@@ -25,12 +31,14 @@
 
 <script>
 import {mapActions, mapGetters} from 'vuex'
+import {Timeline} from 'vue-tweet-embed'
 import Loader from '../components/Loader'
 
 export default {
     name: 'Coin',
     components: {
-        Loader
+        Loader,
+        Timeline
     },
     data() {
         return {
@@ -43,7 +51,6 @@ export default {
             getPrice: 'GET_PRICE',
         }),
         selectTab(tab) {
-            console.log(tab)
             this.selectedTab = tab
         }
     },
@@ -61,15 +68,17 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-    h1 {
+<style lang="less">
+    .coin-page-header {
+        h1 {
         display: flex;
         justify-content: center;
         align-items: center;
-        img {
-            padding-right: 10px;
-            width: 25px;
-            height: 25px;
+            img {
+                padding-right: 10px;
+                width: 25px;
+                height: 25px;
+            }
         }
     }
 
@@ -89,5 +98,20 @@ export default {
         text-align: left;
         max-width: 80%;
         margin: 0 auto;
+    }
+
+    .twitter-block {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .twitter-block, .site-preview-block {
+        position: relative;
+        .loader {
+            position: absolute;
+            left: 37%;
+            top: 170px;
+            z-index: -1;
+        }
     }
 </style>
