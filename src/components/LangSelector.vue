@@ -24,12 +24,28 @@ export default {
     },
     methods: {
         selectLang(option) {
+            localStorage.setItem('selectedLng', option.name)
+            localStorage.setItem('selectedLngKey', option.key)
             this.lngSelected = option.name
             this.$i18n.locale = option.key
             this.toggleSelector()
         },
         toggleSelector() {
             this.show = !this.show
+        }
+    },
+    mounted() {
+        const selectedLang = localStorage.getItem('selectedLng')
+        const localeKey = localStorage.getItem('selectedLngKey')
+        if (selectedLang) {
+            this.lngSelected = selectedLang
+        } else {
+            this.lngSelected = 'ENG'
+        }
+        if (localeKey) {
+            this.$i18n.locale = localeKey
+        } else {
+            this.$i18n.locale = 'en'
         }
     }
 }

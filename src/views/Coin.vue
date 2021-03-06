@@ -74,8 +74,6 @@ export default {
                 that.iframe_loaded = true
             }
         }, 1000)
-        
-
     }
 }
 </script>
