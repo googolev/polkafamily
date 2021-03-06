@@ -9,8 +9,8 @@
                 <div @click="selectTab('twitter')" v-if="coin.twitter"  :class="{'active': selectedTab === 'twitter'}">Twitter</div>
             </div>
             <div v-show="selectedTab === 'webPreview'" class="site-preview-block">
-                <Loader />
-                <iframe v-if="coin.link" :src="`https://${coin.link}`"
+                <Loader v-if="!iframe_loaded" />
+                <iframe :src="`https://${coin.link}`" id="coin-iframe"
                     width="100%" height="1000" frameborder="0"
                     allowfullscreen sandbox="allow-scripts">
                 </iframe>
@@ -19,8 +19,8 @@
                 <div class="description-block" v-if="getDescription($i18n.locale, coin.key)" v-html="getDescription($i18n.locale, coin.key)"></div>
             </div>
             <div v-show="selectedTab === 'twitter'" class="twitter-block">
-                <Loader />
-                <Timeline :id="coin.twitter" sourceType="profile" @loaded="console.log('fasf')" />
+                <Loader  v-if="isTwitterLoaded"/>
+                <Timeline :id="coin.twitter" sourceType="profile" :ref="'twitter'" />
             </div>
         </div>
         <div v-else>
@@ -43,7 +43,8 @@ export default {
     data() {
         return {
             coin: null,
-            selectedTab: 'default'
+            selectedTab: 'default',
+            iframe_loaded: false,
         }
     },
     methods: {
@@ -59,11 +60,22 @@ export default {
             price: 'getPrice',
             getCoin: 'getCoin',
             getDescription: 'getDescription'
-        })
+        }),
+        isTwitterLoaded() {
+            return this.$refs['twitter'] ? this.$refs['twitter'].isLoaded : false
+        }
     },
     async mounted() {
         await this.getPrice(this.$route.params.key)
         this.coin = this.getCoin(this.$route.params.key)
+        const that = this
+        setTimeout(function() {
+            document.querySelector('#coin-iframe').onload = function() {
+                that.iframe_loaded = true
+            }
+        }, 1000)
+        
+
     }
 }
 </script>
@@ -112,6 +124,10 @@ export default {
             left: 37%;
             top: 170px;
             z-index: -1;
+        }
+
+        iframe {
+            z-index: 9999;
         }
     }
 </style>
