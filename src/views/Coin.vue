@@ -7,6 +7,7 @@
                 <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">{{ $t('COIN_PAGE.SUMMARY') }}</div>
                 <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">{{ $t('COIN_PAGE.PREVIEW') }}</div>
                 <div @click="selectTab('twitter')" v-if="coin.twitter"  :class="{'active': selectedTab === 'twitter'}">Twitter</div>
+                <div @click="selectTab('chart')" v-if="coin.twitter"  :class="{'active': selectedTab === 'chart'}">{{ $t('COIN_PAGE.CHART')}}</div>
             </div>
             <div v-show="selectedTab === 'webPreview'" class="site-preview-block">
                 <Loader v-if="!iframe_loaded" />
@@ -22,6 +23,9 @@
                 <Loader  v-if="isTwitterLoaded"/>
                 <Timeline :id="coin.twitter" sourceType="profile" :ref="'twitter'" />
             </div>
+            <div v-show="selectedTab === 'chart'">
+                <Chart :chartData="getChartData" v-if="getChartData.length" :coinKey="coin.key" />
+            </div>
         </div>
         <div v-else>
             <Loader />
@@ -33,12 +37,14 @@
 import {mapActions, mapGetters} from 'vuex'
 import {Timeline} from 'vue-tweet-embed'
 import Loader from '../components/Loader'
+import Chart from '../components/Chart'
 
 export default {
     name: 'Coin',
     components: {
         Loader,
-        Timeline
+        Timeline,
+        Chart
     },
     data() {
         return {
@@ -50,6 +56,7 @@ export default {
     methods: {
          ...mapActions('coins', {
             getPrice: 'GET_PRICE',
+            getChartInfo: 'GET_CHART_INFO'
         }),
         selectTab(tab) {
             this.selectedTab = tab
@@ -59,7 +66,8 @@ export default {
         ...mapGetters('coins', {
             price: 'getPrice',
             getCoin: 'getCoin',
-            getDescription: 'getDescription'
+            getDescription: 'getDescription',
+            getChartData: 'getChartData'
         }),
         isTwitterLoaded() {
             return this.$refs['twitter'] ? this.$refs['twitter'].isLoaded : false
@@ -67,6 +75,7 @@ export default {
     },
     async mounted() {
         await this.getPrice(this.$route.params.key)
+        await this.getChartInfo(this.$route.params.key)
         this.coin = this.getCoin(this.$route.params.key)
         const that = this
         setTimeout(function() {
@@ -94,6 +103,7 @@ export default {
 
     .tabs {
         display:flex;
+        margin-top: 10px;
         div {
             padding: 10px;
             border: 1px solid black;

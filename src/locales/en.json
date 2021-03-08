@@ -1,6 +1,7 @@
 {
     "COIN_PAGE": {
         "SUMMARY": "Summary",
-        "PREVIEW": "Site preview"
+        "PREVIEW": "Site preview",
+        "CHART": "Chart"
     }
 }

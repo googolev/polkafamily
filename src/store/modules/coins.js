@@ -552,7 +552,8 @@ const getDefaultState = () => {
                 
             }
         },
-        price: {}
+        price: {},
+        currentChartInfo: []
     }
 }
 
@@ -563,6 +564,7 @@ const coins = {
     state: getDefaultState(),
     getters: {
         getCoins: state => state.coins,
+        getChartData: state => state.currentChartInfo,
         getPrice(state){
             return (key) => {
                return state.price[key];
@@ -577,7 +579,7 @@ const coins = {
             return (lang, key) => {
                 return state.description[lang][key]
             }
-        }
+        },
     },
     mutations: {
         RESET_STATE(state) {
@@ -585,17 +587,26 @@ const coins = {
         },
         UPDATE_PRICE(state, currency) {
             Vue.set(state.price, currency.key, currency.price )
+        },
+        UPDATE_CHART_DATA(state, chartData) {
+            state.currentChartInfo = chartData
         }
     },
     actions: {
         async GET_PRICE({commit}, key) {
             const response = await axios.get(`https://min-api.cryptocompare.com/data/price?fsym=${key}&tsyms=USD&api_key=${api_key}`)
-            console.log(response.data)
             let data = {
                 price: response.data.USD,
                 key: key
             }
             commit('UPDATE_PRICE', data)
+        },
+        async GET_CHART_INFO({commit}, key) {
+            const response = await axios.get(`https://min-api.cryptocompare.com/data/v2/histohour?fsym=${key}&tsym=USD&limit=1000&api_key=${api_key}`)
+            console.log(response.data.Data.Data)
+            let formatedChartData = response.data.Data.Data.map((price) => [price.time * 1000, price.open, price.high, price.low, price.close, price.volumeto])
+            commit('UPDATE_CHART_DATA', formatedChartData)
+        
         }
     }
 }

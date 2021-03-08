@@ -12,6 +12,7 @@
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "file-loader": "^6.2.0",
+    "trading-vue-js": "^1.0.1",
     "url-loader": "^4.1.1",
     "vue": "^2.6.11",
     "vue-i18n": "^8.23.0",
