@@ -106,10 +106,14 @@ export default {
         margin-top: 10px;
         div {
             padding: 10px;
-            border: 1px solid black;
             cursor: pointer;
+            border-bottom: 1px solid black;
             &.active {
-                background: grey;
+                border: 1px solid black;
+                border-radius: 4px 4px 0px 0px;
+                border-bottom: none;
+                background: linear-gradient(183deg, rgba(96, 96, 100, 0.5) -8%, rgba(121,25,9,0) 35%, transparent);
+                // background: grey;
             }
         }
     }
