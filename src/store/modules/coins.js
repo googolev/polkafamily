@@ -604,8 +604,13 @@ const coins = {
         async GET_CHART_INFO({commit}, key) {
             const response = await axios.get(`https://min-api.cryptocompare.com/data/v2/histohour?fsym=${key}&tsym=USD&limit=1000&api_key=${api_key}`)
             console.log(response.data.Data.Data)
-            let formatedChartData = response.data.Data.Data.map((price) => [price.time * 1000, price.open, price.high, price.low, price.close, price.volumeto])
-            commit('UPDATE_CHART_DATA', formatedChartData)
+            if (response.data.Response !== 'Error') {
+                let formatedChartData = response.data.Data.Data.map((price) => [price.time * 1000, price.open, price.high, price.low, price.close, price.volumeto])
+                commit('UPDATE_CHART_DATA', formatedChartData)
+            } else {
+                commit('UPDATE_CHART_DATA', [])
+            }
+           
         
         }
     }

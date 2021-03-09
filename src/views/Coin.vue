@@ -7,7 +7,7 @@
                 <div @click="selectTab('default')"  :class="{'active': selectedTab === 'default'}">{{ $t('COIN_PAGE.SUMMARY') }}</div>
                 <div @click="selectTab('webPreview')"  :class="{'active': selectedTab === 'webPreview'}">{{ $t('COIN_PAGE.PREVIEW') }}</div>
                 <div @click="selectTab('twitter')" v-if="coin.twitter"  :class="{'active': selectedTab === 'twitter'}">Twitter</div>
-                <div @click="selectTab('chart')" v-if="coin.twitter"  :class="{'active': selectedTab === 'chart'}">{{ $t('COIN_PAGE.CHART')}}</div>
+                <div @click="selectTab('chart')" v-if="getChartData.length"  :class="{'active': selectedTab === 'chart'}">{{ $t('COIN_PAGE.CHART')}}</div>
             </div>
             <div v-show="selectedTab === 'webPreview'" class="site-preview-block">
                 <Loader v-if="!iframe_loaded" />
